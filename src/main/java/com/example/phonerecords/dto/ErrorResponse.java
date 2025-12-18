@@ -26,7 +26,7 @@ public class ErrorResponse {
         this.status = status;
         this.error = error;
         this.fieldErrors = fieldErrors;
-        this.message = "Validation Failed";
+        this.message = "VALIDATION_FAILED";
     }
 
     // getters and setters

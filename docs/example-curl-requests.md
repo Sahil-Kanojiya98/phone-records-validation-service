@@ -1,8 +1,5 @@
 ## 📝 Curl Examples
 
-All API requests are also available in the **public Postman collection**:  
-👉 [View Postman Collection](https://www.postman.com/telecoms-specialist-47895264/workspace/helloworld/collection/32590055-ccdaa751-f147-4194-8467-7cfcc71ddf45?action=share&creator=32590055)
-
 ---
 
 ### 1 Create a Valid Phone Record

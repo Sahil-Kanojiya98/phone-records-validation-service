@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "ccdaa751-f147-4194-8467-7cfcc71ddf45",
+		"name": "Phone Records REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32590055",
+		"_collection_link": "https://www.postman.com/telecoms-specialist-47895264/workspace/helloworld/collection/32590055-ccdaa751-f147-4194-8467-7cfcc71ddf45?action=share&source=collection_link&creator=32590055"
+	},
+	"item": [
+		{
+			"name": "Create a valid phone record",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"John Doe\",\"phoneNumber\":\"+14152000000\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/phones",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Valid Saved Phone Record (unique mobile number check)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/phones",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a invalid phone record",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Jane Doe\",\"phoneNumber\":\"123\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/phones",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all phone records",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/phones",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get phone record by existing id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/phones/1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get phone record by non-existing id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/phones/999",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones",
+						"999"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080",
+			"type": "default"
+		}
+	]
+}
