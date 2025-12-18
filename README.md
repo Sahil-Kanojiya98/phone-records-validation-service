@@ -82,9 +82,45 @@ docker compose down
 
 ---
 
+## 📂 Project Structure
+
+The project's Java source code resides in the `src/main/java/com/example/phonerecords` folder. Below is an overview of the project's structure and its key files:
+
+```
+src/main/java/com/example/phonerecords
+├── config
+│   └── AbstractApiProperties.java    # Configuration for Abstract API settings
+├── controller
+│   └── PhoneRecordController.java    # REST API controller for phone operations
+├── dto                               # Data Transfer Objects (DTOs)
+│   ├── CreatePhoneRecordRequest.java # Request object for creating phone records
+│   ├── ErrorResponse.java            # Standardized error response structure
+│   ├── PhoneRecordResponse.java      # Response object for phone records
+│   └── PhoneValidationResponse.java  # Response object for phone validation service
+├── exception                         # Custom exceptions and handlers
+│   ├── GlobalExceptionHandler.java   # Centralized exception handling
+│   ├── PhoneAlreadyExistsException.java # Duplicate phone record exception
+│   ├── PhoneNotFoundException.java   # Exception for non-existing records
+│   ├── PhoneValidationException.java # Exception for validation errors
+│   └── PhoneValidationServiceUnavailableException.java # Validation service unavailable
+├── model
+│   └── PhoneRecord.java              # JPA entity for phone records
+├── repository
+│   └── PhoneRecordRepository.java    # Repository interface for phone record data access
+├── service                           # Service layer for business logic
+│   ├── PhoneRecordService.java       # Interface for phone services
+│   ├── PhoneRecordServiceImpl.java   # Implementation of business logic
+│   └── PhoneValidationService.java   # Service for external validation integration
+├── validator
+│   └── PhoneNumberValidator.java     # Utility for phone number format validation
+└── PhoneRecordsApplication.java      # Main Spring Boot application entry point
+```
+
+---
+
 ## API Usage Examples
 
-See [docs/curl-examples.md](docs/curl-examples.md) for detailed curl commands.
+See [docs/curl-examples.md](docs/curl-examples.md) for detailed cURL commands.
 
 ### Quick Examples
 
@@ -108,44 +144,46 @@ curl http://localhost:8080/api/phones
 curl http://localhost:8080/api/phones/1
 ```
 
+---
+
 ## Response Examples
 
 ### Success Response (201 Created)
 ```json
 {
-  "id": 1,
-  "name": "John Doe",
-  "phoneNumber": "14158586273"
+   "id": 1,
+   "name": "John Doe",
+   "phoneNumber": "14158586273"
 }
 ```
 
 ### Error Response (400 Bad Request - Invalid Phone)
 ```json
 {
-  "timestamp": "2024-12-17T10:30:00",
-  "status": 400,
-  "error": "PHONE_RECORD_VALIDATION_FAILED",
-  "message": "Invalid phone number: 1234567890. Reason: Phone number validation failed"
+   "timestamp": "2024-12-17T10:30:00",
+   "status": 400,
+   "error": "PHONE_RECORD_VALIDATION_FAILED",
+   "message": "Invalid phone number: 1234567890. Reason: Phone number validation failed"
 }
 ```
 
 ### Error Response (409 Conflict - Duplicate Phone)
 ```json
 {
-  "timestamp": "2024-12-17T10:30:00",
-  "status": 409,
-  "error": "PHONE_ALREADY_EXISTS",
-  "message": "Phone number '14158586273' already exists with ID: 1"
+   "timestamp": "2024-12-17T10:30:00",
+   "status": 409,
+   "error": "PHONE_ALREADY_EXISTS",
+   "message": "Phone number '14158586273' already exists with ID: 1"
 }
 ```
 
 ### Error Response (404 Not Found)
 ```json
 {
-  "timestamp": "2024-12-17T10:30:00",
-  "status": 404,
-  "error": "PHONE_RECORD_NOT_FOUND",
-  "message": "Phone record not found with id: 999"
+   "timestamp": "2024-12-17T10:30:00",
+   "status": 404,
+   "error": "PHONE_RECORD_NOT_FOUND",
+   "message": "Phone record not found with id: 999"
 }
 ```
 

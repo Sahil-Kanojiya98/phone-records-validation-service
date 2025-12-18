@@ -1,33 +1,248 @@
-## 📝 Curl Examples
+# 📝 Guide: cURL Examples and Exception Handling in Phone Records Validation Service
+
+This guide covers:
+- Example `cURL` commands to interact with Phone Records REST API
+- Expected responses for valid and invalid interactions
+- Exception handling in the Phone Records Validation Service
 
 ---
 
-### 1 Create a Valid Phone Record
+## 📌 cURL Examples for API Testing
+
+---
+
+### 1. Create a Valid Phone Record
 ```bash
-curl -X POST http://localhost:8080/api/phones -H "Content-Type: application/json" -d '{"name":"John Doe","phoneNumber":"+14152000000"}'
+curl -X POST http://localhost:8080/api/phones \
+-H "Content-Type: application/json" \
+-d '{"name":"John Doe","phoneNumber":"+14152000000"}'
 ```
 
-### 2 Create a Valid Saved Phone Record (unique mobile number check)
-```bash
-curl -X POST http://localhost:8080/api/phones -H "Content-Type: application/json" -d '{"name":"John Doe","phoneNumber":"+14152000000"}'
+**Response (201 Created):**
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "phoneNumber": "+14152000000"
+}
 ```
 
-### 3 Create an Invalid Phone Record
+---
+
+### 2. Create a Valid Saved Phone Record (Unique Mobile Number Check)
 ```bash
-curl -X POST http://localhost:8080/api/phones -H "Content-Type: application/json" -d '{"name":"Jane Doe","phoneNumber":"123"}'
+curl -X POST http://localhost:8080/api/phones \
+-H "Content-Type: application/json" \
+-d '{"name":"John Doe","phoneNumber":"+14152000000"}'
 ```
 
-### 4 Get All Phone Records
+**Response (409 Conflict):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 409,
+  "error": "PHONE_ALREADY_EXISTS",
+  "message": "A phone record with this number already exists"
+}
+```
+
+---
+
+### 3. Create an Invalid Phone Record
+```bash
+curl -X POST http://localhost:8080/api/phones \
+-H "Content-Type: application/json" \
+-d '{"name":"Jane Doe","phoneNumber":"123"}'
+```
+
+**Response (400 Bad Request):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 400,
+  "error": "VALIDATION_FAILED",
+  "fieldErrors": {
+    "phoneNumber": "Invalid phone number format"
+  },
+  "message": "VALIDATION_FAILED"
+}
+```
+
+---
+
+### 4. Get All Phone Records
 ```bash
 curl http://localhost:8080/api/phones
 ```
 
-### 5 Get Phone Record by Existing ID
+**Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "phoneNumber": "+14152000000"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "phoneNumber": "+19876543210"
+  }
+]
+```
+
+---
+
+### 5. Get Phone Record by Existing ID
 ```bash
 curl http://localhost:8080/api/phones/1
 ```
 
-### 6 Get Phone Record by Non-Existing ID
+**Response (200 OK):**
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "phoneNumber": "+14152000000"
+}
+```
+
+---
+
+### 6. Get Phone Record by Non-Existing ID
 ```bash
 curl http://localhost:8080/api/phones/999
 ```
+
+**Response (404 Not Found):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 404,
+  "error": "PHONE_RECORD_NOT_FOUND",
+  "message": "No phone record found for the given ID"
+}
+```
+
+---
+
+## 🔧 Exception Handling Overview
+
+Here are the main exceptions handled by the service and their corresponding response formats:
+
+---
+
+### 1. Validation Errors
+**Exception Class:** `MethodArgumentNotValidException`
+
+**Response (400 Bad Request):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 400,
+  "error": "VALIDATION_FAILED",
+  "fieldErrors": {
+    "fieldName": "Error message for the field"
+  },
+  "message": "VALIDATION_FAILED"
+}
+```
+
+---
+
+### 2. Record Not Found
+**Exception Class:** `PhoneNotFoundException`
+
+**Response (404 Not Found):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 404,
+  "error": "PHONE_RECORD_NOT_FOUND",
+  "message": "No phone record found for the given ID"
+}
+```
+
+---
+
+### 3. Validation Service Unavailable
+**Exception Class:** `PhoneValidationServiceUnavailableException`
+
+**Response (503 Service Unavailable):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 503,
+  "error": "SERVICE_UNAVAILABLE",
+  "message": "Phone validation service is temporarily unavailable"
+}
+```
+
+---
+
+### 4. Duplicate Phone Records
+**Exception Class:** `PhoneAlreadyExistsException`
+
+**Response (409 Conflict):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 409,
+  "error": "PHONE_ALREADY_EXISTS",
+  "message": "A phone record with this number already exists"
+}
+```
+
+---
+
+### 5. Generic/Internal Server Errors
+**Exception Class:** `Exception`
+
+**Response (500 Internal Server Error):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 500,
+  "error": "INTERNAL_SERVER_ERROR",
+  "message": "Unexpected server error occurred"
+}
+```
+
+---
+
+## 📚 DTO Classes for API and Exception Responses
+
+### 1. `PhoneRecordResponse`
+- Represents the response schema for a valid phone record.
+
+```java
+public class PhoneRecordResponse {
+    private Long id;
+    private String name;
+    private String phoneNumber;
+
+    // Constructor, getters, and setters omitted for brevity
+}
+```
+
+---
+
+### 2. `ErrorResponse`
+- Represents the response schema for error cases.
+
+```java
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ErrorResponse {
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private String message;
+    private Map<String, String> fieldErrors;
+
+    // Constructors, getters, and setters omitted for brevity
+}
+```
+
+---
+
+This concludes the guide for API testing using `cURL` and understanding the exception handling implemented in the Phone Records Validation Service.
