@@ -1,0 +1,35 @@
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: phone-records-mysql
+    restart: on-failure:3
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: phone-records-app
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      ABSTRACT_API_KEY: ${ABSTRACT_API_KEY}
+      ABSTRACT_API_URL: ${ABSTRACT_API_URL}
+    restart: on-failure:3
+
+volumes:
+  mysql_data:
