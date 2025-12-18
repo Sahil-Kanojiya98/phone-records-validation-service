@@ -8,8 +8,8 @@ This guide will help you import the Postman API tests and validate the Phone Rec
 
 1. Open your [Postman](https://www.postman.com/) application.
 2. Click on the **Import** button located at the top-left corner of Postman.
-3. Navigate to the `postman` folder in your project directory which contains the `Postman_Records_API_Collection.json` file.
-4. Select the `Postman_Records_API_Collection.json` file and click **Open** or **Import**.
+3. Navigate to the `postman` folder in your project directory which contains the `Phone_Records_API_Collection.json` file.
+4. Select the `Phone_Records_API_Collection.json` file and click **Open** or **Import**.
 5. Verify that the collection titled **Phone Records REST API** appears under the **Collections** tab in Postman.
 
 ---
