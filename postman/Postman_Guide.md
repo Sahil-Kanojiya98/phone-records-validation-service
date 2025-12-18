@@ -52,6 +52,10 @@ This guide will help you import the Postman API tests and validate the Phone Rec
     - **GET /api/phones**:
         - All Records (200 OK)
         - Records by ID (200 OK or 404 Not Found)
+    - **GET /api/phones/{id}**:
+        - Existing ID (200 OK)
+        - Non-existing ID (404 Not Found)
+
 2. Verify that each endpoint request meets its expected behavior.
 
 ---
