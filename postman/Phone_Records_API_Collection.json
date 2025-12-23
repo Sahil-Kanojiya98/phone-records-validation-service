@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "ccdaa751-f147-4194-8467-7cfcc71ddf45",
+		"_postman_id": "6750aea8-6e34-467d-8a91-d6426ca74a8c",
 		"name": "Phone Records REST API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "32590055",
-		"_collection_link": "https://www.postman.com/telecoms-specialist-47895264/workspace/helloworld/collection/32590055-ccdaa751-f147-4194-8467-7cfcc71ddf45?action=share&source=collection_link&creator=32590055"
+		"_exporter_id": "50983053",
+		"_collection_link": "https://loyor25909-1060468.postman.co/workspace/John-Doe's-Workspace~e4e3efb7-f7f2-429e-8b0e-dc209ad38f85/collection/50983053-6750aea8-6e34-467d-8a91-d6426ca74a8c?action=share&source=collection_link&creator=50983053"
 	},
 	"item": [
 		{
@@ -67,7 +67,7 @@
 			"response": []
 		},
 		{
-			"name": "Create a invalid phone record",
+			"name": "Create a invalid phone record (internal validation)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -78,13 +78,31 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"name\":\"Jane Doe\",\"phoneNumber\":\"123\"}",
+					"raw": "{\"name\":\"Jane Doe\",\"phoneNumber\":\"+123\"}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
+				"url": {
+					"raw": "{{baseURL}}/api/phones",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"phones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a invalid phone record (external validation api)",
+			"request": {
+				"method": "POST",
+				"header": [],
 				"url": {
 					"raw": "{{baseURL}}/api/phones",
 					"host": [

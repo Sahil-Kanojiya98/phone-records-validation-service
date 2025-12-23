@@ -48,11 +48,11 @@ curl -X POST http://localhost:8080/api/phones \
 
 ---
 
-### 3. Create an Invalid Phone Record
+### 3. Create an Invalid Phone Record (internal validation)
 ```bash
 curl -X POST http://localhost:8080/api/phones \
 -H "Content-Type: application/json" \
--d '{"name":"Jane Doe","phoneNumber":"123"}'
+-d '{"name":"Jane Doe","phoneNumber":"+19875745"}'
 ```
 
 **Response (400 Bad Request):**
@@ -62,15 +62,32 @@ curl -X POST http://localhost:8080/api/phones \
   "status": 400,
   "error": "VALIDATION_FAILED",
   "fieldErrors": {
-    "phoneNumber": "Invalid phone number format"
+    "phoneNumber": "Phone number must be in international format, e.g., +919875857545"
   },
   "message": "VALIDATION_FAILED"
 }
 ```
 
+### 4. Create an Invalid Phone Record (external validation api)
+```bash
+curl -X POST http://localhost:8080/api/phones \
+-H "Content-Type: application/json" \
+-d '{"name":"Jane Doe","phoneNumber":"+19875191887"}'
+```
+
+**Response (400 Bad Request):**
+```json
+{
+  "timestamp": "2025-12-18T12:00:00",
+  "status": 400,
+  "error": "PHONE_RECORD_VALIDATION_FAILED",
+  "message": "Invalid phone number: +19875191887"
+}
+```
+
 ---
 
-### 4. Get All Phone Records
+### 5. Get All Phone Records
 ```bash
 curl http://localhost:8080/api/phones
 ```
@@ -93,7 +110,7 @@ curl http://localhost:8080/api/phones
 
 ---
 
-### 5. Get Phone Record by Existing ID
+### 6. Get Phone Record by Existing ID
 ```bash
 curl http://localhost:8080/api/phones/1
 ```
@@ -109,7 +126,7 @@ curl http://localhost:8080/api/phones/1
 
 ---
 
-### 6. Get Phone Record by Non-Existing ID
+### 7. Get Phone Record by Non-Existing ID
 ```bash
 curl http://localhost:8080/api/phones/999
 ```

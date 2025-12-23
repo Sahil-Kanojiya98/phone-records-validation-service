@@ -29,7 +29,8 @@ This guide will help you import the Postman API tests and validate the Phone Rec
 2. Expand the collection and review the different requests prepared for testing:
     - **Create a valid phone record**
     - **Create a valid saved phone record (unique mobile number check)**
-    - **Create an invalid phone record**
+    - **Create an invalid phone record (internal validation)**
+    - **Create an invalid phone record (external validation api)**
     - **Get all phone records**
     - **Get phone record by existing id**
     - **Get phone record by non-existing id**.

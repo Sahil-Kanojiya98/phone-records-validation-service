@@ -74,11 +74,11 @@ docker compose down
 
 ## 📦 API Endpoints
 
-| **Method** | **Endpoint**         | **Description**                |
-|------------|-----------------------|--------------------------------|
-| `POST`     | `/api/phones`         | Create a phone record          |
-| `GET`      | `/api/phones`         | Get all phone records          |
-| `GET`      | `/api/phones/{id}`    | Get phone record by ID         |
+| **Method** | **Endpoint**       | **Description**        |
+|------------|--------------------|------------------------|
+| `POST`     | `/api/phones`      | Create a phone record  |
+| `GET`      | `/api/phones`      | Get all phone records  |
+| `GET`      | `/api/phones/{id}` | Get phone record by ID |
 
 ---
 
@@ -157,13 +157,24 @@ curl http://localhost:8080/api/phones/1
 }
 ```
 
-### Error Response (400 Bad Request - Invalid Phone)
+### Error Response (400 Bad Request - Invalid Phone (internal validation, external validation))
 ```json
 {
    "timestamp": "2024-12-17T10:30:00",
    "status": 400,
    "error": "PHONE_RECORD_VALIDATION_FAILED",
    "message": "Invalid phone number: 1234567890. Reason: Phone number validation failed"
+}
+```
+```json
+{
+    "timestamp": "2025-12-23T10:22:54.5007307",
+    "status": 400,
+    "error": "VALIDATION_FAILED",
+    "message": "VALIDATION_FAILED",
+    "fieldErrors": {
+        "phoneNumber": "Phone number must be in international format, e.g., +919875857545"
+    }
 }
 ```
 
