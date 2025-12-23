@@ -37,12 +37,8 @@ class PhoneRecordServiceImplTest {
         request.setName("John Doe");
         request.setPhoneNumber("+1234567890");
 
-        PhoneValidationResponse validationResponse = new PhoneValidationResponse();
-        validationResponse.setPhoneNumber("+1234567890");
-        validationResponse.setPhoneValidation(new PhoneValidationResponse.PhoneValidation(true));
-
-        when(validator.validatePhoneNumber(request.getPhoneNumber())).thenReturn(validationResponse);
-        when(repository.existsByPhoneNumber("+1234567890")).thenReturn(false);
+        when(validator.validatePhoneNumber(request.getPhoneNumber())).thenReturn(true);
+        when(repository.existsByPhoneNumber(request.getPhoneNumber())).thenReturn(false);
 
         PhoneRecord savedRecord = new PhoneRecord();
         savedRecord.setId(1L);
@@ -66,10 +62,7 @@ class PhoneRecordServiceImplTest {
         request.setName("Jane");
         request.setPhoneNumber("+111");
 
-        PhoneValidationResponse validationResponse = new PhoneValidationResponse();
-        validationResponse.setPhoneValidation(new PhoneValidationResponse.PhoneValidation(false));
-
-        when(validator.validatePhoneNumber("+111")).thenReturn(validationResponse);
+        when(validator.validatePhoneNumber("+111")).thenReturn(false);
 
         assertThrows(PhoneValidationException.class, () -> service.createPhoneRecord(request));
     }
@@ -80,11 +73,7 @@ class PhoneRecordServiceImplTest {
         request.setName("John");
         request.setPhoneNumber("+1234567890");
 
-        PhoneValidationResponse validationResponse = new PhoneValidationResponse();
-        validationResponse.setPhoneNumber("+1234567890");
-        validationResponse.setPhoneValidation(new PhoneValidationResponse.PhoneValidation(true));
-
-        when(validator.validatePhoneNumber("+1234567890")).thenReturn(validationResponse);
+        when(validator.validatePhoneNumber("+1234567890")).thenReturn(true);
         when(repository.existsByPhoneNumber("+1234567890")).thenReturn(true);
 
         assertThrows(PhoneAlreadyExistsException.class, () -> service.createPhoneRecord(request));

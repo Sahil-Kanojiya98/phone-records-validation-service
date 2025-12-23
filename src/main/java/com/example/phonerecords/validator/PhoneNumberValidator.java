@@ -27,7 +27,7 @@ public class PhoneNumberValidator {
         this.baseUrl = properties.getUrl();
     }
 
-    public PhoneValidationResponse validatePhoneNumber(String phoneNumber) {
+    public boolean validatePhoneNumber(String phoneNumber) {
         final String url = baseUrl + "?api_key=" + apiKey + "&phone=" + phoneNumber;
 
         try {
@@ -35,7 +35,8 @@ public class PhoneNumberValidator {
                     restTemplate.getForEntity(url, PhoneValidationResponse.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                return response.getBody();
+                PhoneValidationResponse phoneValidationResponse = response.getBody();
+                return phoneValidationResponse.getPhoneValidation().getValid();
             } else {
                 log.error("Phone validation API returned non-OK status: {}", response.getStatusCode());
                 throw new PhoneValidationServiceUnavailableException("Phone validation service unavailable. Status: " + response.getStatusCode());

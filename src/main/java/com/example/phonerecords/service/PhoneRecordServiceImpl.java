@@ -2,7 +2,6 @@ package com.example.phonerecords.service;
 
 import com.example.phonerecords.dto.CreatePhoneRecordRequest;
 import com.example.phonerecords.dto.PhoneRecordResponse;
-import com.example.phonerecords.dto.PhoneValidationResponse;
 import com.example.phonerecords.exception.PhoneAlreadyExistsException;
 import com.example.phonerecords.exception.PhoneNotFoundException;
 import com.example.phonerecords.exception.PhoneValidationException;
@@ -35,28 +34,21 @@ public class PhoneRecordServiceImpl implements PhoneRecordService {
     public PhoneRecordResponse createPhoneRecord(CreatePhoneRecordRequest createPhoneRecordRequest) {
         log.info("Creating phone record for name: {}, phone: {}", createPhoneRecordRequest.getName(), createPhoneRecordRequest.getPhoneNumber());
 
-        PhoneValidationResponse phoneValidationResponse = phoneNumberValidator.validatePhoneNumber(createPhoneRecordRequest.getPhoneNumber());
-        if (phoneValidationResponse.getPhoneValidation() == null) {
-            log.warn("Phone validation API returned empty response for {}", createPhoneRecordRequest.getPhoneNumber());
-            throw new PhoneValidationException("Unable to validate phone number: " + createPhoneRecordRequest.getPhoneNumber());
+        if (phoneRecordRepository.existsByPhoneNumber(createPhoneRecordRequest.getPhoneNumber())) {
+            log.error("Phone number already exists: {}", createPhoneRecordRequest.getPhoneNumber());
+            throw new PhoneAlreadyExistsException("Phone number already exists: " + createPhoneRecordRequest.getPhoneNumber());
         }
 
-        boolean isValid = phoneValidationResponse.getPhoneValidation().getValid();
+        boolean isValid = phoneNumberValidator.validatePhoneNumber(createPhoneRecordRequest.getPhoneNumber());
+
         if (!isValid) {
             log.warn("Phone number is invalid: {}", createPhoneRecordRequest.getPhoneNumber());
             throw new PhoneValidationException("Invalid phone number: " + createPhoneRecordRequest.getPhoneNumber());
         }
 
-        String normalizedPhoneNumber = phoneValidationResponse.getPhoneNumber();
-
-        if (phoneRecordRepository.existsByPhoneNumber(normalizedPhoneNumber)) {
-            log.error("Phone number already exists: {}", createPhoneRecordRequest.getPhoneNumber());
-            throw new PhoneAlreadyExistsException("Phone number already exists: " + createPhoneRecordRequest.getPhoneNumber());
-        }
-
         PhoneRecord entity = new PhoneRecord();
         entity.setName(createPhoneRecordRequest.getName());
-        entity.setPhoneNumber(normalizedPhoneNumber);
+        entity.setPhoneNumber(createPhoneRecordRequest.getPhoneNumber());
 
         PhoneRecord phoneRecord = phoneRecordRepository.save(entity);
         log.info("Phone record created with ID: {}", phoneRecord.getId());
