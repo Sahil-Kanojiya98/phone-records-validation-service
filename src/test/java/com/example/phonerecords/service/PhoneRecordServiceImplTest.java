@@ -2,7 +2,6 @@ package com.example.phonerecords.service;
 
 import com.example.phonerecords.dto.CreatePhoneRecordRequest;
 import com.example.phonerecords.dto.PhoneRecordResponse;
-import com.example.phonerecords.dto.PhoneValidationResponse;
 import com.example.phonerecords.exception.PhoneAlreadyExistsException;
 import com.example.phonerecords.exception.PhoneNotFoundException;
 import com.example.phonerecords.exception.PhoneValidationException;
